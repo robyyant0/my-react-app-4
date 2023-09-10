@@ -3,8 +3,8 @@ import Button from "../Elements/Button";
 const CardProduct =(props) => {
     const {children} = props;
         return (
-            <div className = "flex justify-center mx-2">
-                <div className="w-full max-w-sm bg-gray-800 border border-gray-700 rounded-lg shadow flex flex-col justify-between">
+            <div className = "flex justify-center mx-2   ">
+                <div className="w-full max-w-sm bg-gray-800  border border-gray-700 rounded-lg shadow mx-2 my-2 flex flex-col justify-between">
                     {children}            
                 </div>
             </div>        
@@ -14,11 +14,11 @@ const CardProduct =(props) => {
 const Header = (props) => {
     const {image} = props;
     return (
-        <div className="w-full max-w-sm bg-gray-800 border border-gray-700 rounded-lg shadow">
+        <div className="w-full max-w-xs bg-gray-800 border border-gray-700 rounded-lg shadow flex flex-col">
             <a href="#">
                 <img src={image} 
                     alt="product"                         
-                    className="p-8 rounded-t-lg w-3/5"
+                    className="p-8 rounded-t-lg w-3/5" 
                 />
             </a>
         </div>
@@ -29,7 +29,7 @@ const Header = (props) => {
 const Body = (props) => {
     const {children , name} = props;
     return (
-        <div className="px-5 pb-5 h-full">
+        <div className="px-5 pb-5 h-full  ">
                 <a href="#">
                     <h5 className="text-xl font-semibold tracking-tight text-red-400 "> 
                         {name}
@@ -41,11 +41,15 @@ const Body = (props) => {
 };
 
 const Footer = (props) => {
-    const {price} = props;
+    const {price, handleAddToCart, id} = props;
     return(
         <div className="flex item-center justify-between px-5 pb-5">
-                <span className="text-xl fond-bold text-white">{price} </span>
-                <Button className="bg-blue-700 rounded-lg shadow"> Add To Cart  
+                <span className="text-xl fond-bold text-white">
+                    Rp.{" "}
+                    {price.toLocaleString("id-ID", { styles:"currency", currency:"IDR", })} 
+                </span>
+                <Button className="bg-red-500" onClick={() =>handleAddToCart(id)}> 
+                    Add To Cart
                 </Button>
         </div>
     )

@@ -28,10 +28,6 @@ export default App;
             />       
           </div>
 
-
-
-
-
           <Button variant ="bg-red-700">Login</Button>
           <Button></Button>
           <Button>Register</Button>

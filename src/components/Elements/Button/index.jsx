@@ -1,9 +1,14 @@
 const Button = (props) =>{
-    const {children = ".....", classname = "bg-black"} = props;
+    const {children ,className  = "bg-red-600" , onClick = () => {}, 
+            type="button" , 
+          } = props;
     return  (
            <button 
-                className={`h-10 px-6 font-semibold rounded-md ${classname} text-white`}
-                type="submit"  > {children}
+                className={`h-10 px-6 font-semibold rounded-md ${className} text-white`}
+                type={type} 
+                onClick={onClick}
+            >                 
+            {children}
             </button>
     );
   } 
