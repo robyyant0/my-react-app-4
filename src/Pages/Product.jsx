@@ -1,4 +1,5 @@
-import { Fragment,useEffect,useState } from "react";
+import { Fragment,useEffect,useRef,useState } from "react";
+
 import CardProduct from "../components/Flagments/CardProduct";
 import Button from "../components/Elements/Button";
 import Counter from "../components/Flagments/Counter";
@@ -34,18 +35,9 @@ const ProductPage = () => {
     const [cart, setCart] = useState([]);
 
     const [totalPrice, setTotalPrice] = useState([0]);
-
-    // Initial State for cart: When retrieving data from localStorage, you should provide a default value for cart in
-    //case there's nothing stored in localStorage. In your useEffect, you're using an empty array as a fallback,
-    //which is not a valid JSON format. You should use [] instead:
-
     useEffect (() => {
-        // Retrieving from localStorage
-        setCart(JSON.parse(localStorage.getItem("cart")) || []);
+        setCart (JSON.parse(localStorage.getItem("cart") || []))
     } , []);
-
- 
-      
 
     useEffect(() => {
             if (cart.length > 0){
@@ -54,11 +46,9 @@ const ProductPage = () => {
                     return acc + product.price * item.qty;
                     } , 0)
                     setTotalPrice(sum);
-                    // Saving to localStorage
                     localStorage.setItem("cart", JSON.stringify(cart));
-
             }
-    }, [cart]);
+            }, [cart]);
     
 
     const handleLogout = () => {
@@ -77,16 +67,33 @@ const ProductPage = () => {
       else {
         setCart ([...cart, {id,qty:1}])
       }
-    }
+    };
+//useRef
+    const cartRef = useRef(JSON.parse(localStorage.getItem("cart")) || []);
+
+    const handleAddToCartRef = (id) => {
+        cartRef.current = [...cartRef, {id,qty:2}];
+        localStorage.setItem("cart", JSON.stringify(cartRef.current));
+      };
+
+    const totalPriceRef = useRef(null) ;   
+    useEffect(() => {
+        if (cart.length > 1) {
+            totalPriceRef.current.style.Display = "table-row";
+        }
+        else {
+            totalPriceRef.current.style.Display = "none";
+        }
+    }, [cart]) ;
+//useRef
     return (
         <Fragment>
-            <div className="flex justify-end h-20 bg-red-600 text-white items-center px-5 ">
-               <div className="mr-4"> {email}</div>
+            <div className="flex justify-end h-20 bg-red-600 text-white items-center px-10 ">
+               <div className=" mr-4"> {email}</div>
             <Button className="ml-4 bg-black" onClick={handleLogout}>  Logout</Button>
             </div>
-
             <div className = "flex justify-center py-5 ">
-               <div className="w-4/6 flex flex-wrap">
+               <div className="w-4/6 flex flex-w">
                     {Products.map ((product) => (
                         <CardProduct key={product.id}>
                         <CardProduct.Header image= {product.image}/> 
@@ -113,7 +120,7 @@ const ProductPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {cart.map ((item) => {
+                            {cart.map ((item) => { 
                                     const product = Products.find(
                                         (product) => (product.id) === item.id
                                 );
@@ -136,7 +143,7 @@ const ProductPage = () => {
                                     </tr>                                    
                                 )
                             })}
-                            <tr>
+                            <tr ref={totalPriceRef}>
                                 <td className="colSpan={3}">
                                     <b>Total Price</b>
                                 </td>
@@ -152,6 +159,10 @@ const ProductPage = () => {
 
                                 </td>
                             </tr>
+                            <tr>
+
+                            </tr>
+                        
                         </tbody>
                     </table>
                </div>
